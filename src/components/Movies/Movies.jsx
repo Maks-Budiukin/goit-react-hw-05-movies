@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+
+import { Movie } from "components/Movie/Movie";
 import { MoviesSearchForm } from "components/MoviesSearchForm/MoviesSearchForm";
 import axios from "axios";
 
@@ -50,7 +53,7 @@ export const Movies = () => {
             const data = response.data;
     
             setMovies(data.results)
-    
+            console.log(data.results)
             return data;
         }
     }
@@ -59,10 +62,9 @@ export const Movies = () => {
     
     useEffect(() => {
         if (isFirstRender.current) {
-            console.log(request)
+            fetchMovies(request)
         }
-        fetchMovies(request)
-              isFirstRender.current = true;
+        isFirstRender.current = true;
     },[request])
 
 
@@ -72,7 +74,11 @@ export const Movies = () => {
       <>
           <MoviesSearchForm onSubmit={onSearchSubmit}/>
           <ul>
-              {movies.map((movie) => <li key={movie.id}>{movie.title}</li>) }
+              {movies.map((movie) =>
+                <Link to={`${movie.id}`} key={movie.id}>
+                    <li >{movie.title}</li>
+                </Link>
+              )}
             </ul>
     </>
     );

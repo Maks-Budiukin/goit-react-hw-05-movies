@@ -4,13 +4,13 @@ import { Routes, Route, Link } from "react-router-dom";
 import { Home } from "./Home/Home";
 import { Cast } from "./Cast/Cast";
 import { Movies } from "./Movies/Movies";
+import { Movie } from "./Movie/Movie";
 import { Reviews } from "./Reviews/Reviews";
 import { NotFound } from "./NotFound/NotFound";
 
-import axios from "axios";
-
 
 export const App = () => {
+  
 //   const [trending, setTrending] = useState([]);
 //   const [loading, setLoading] = useState(false);
 //   const isFirstRender = useRef(true);
@@ -48,7 +48,7 @@ export const App = () => {
 //       isFirstRender.current = false;
 //      }
 //   }, [])
-  
+
   return (<>
     
 
@@ -61,6 +61,10 @@ export const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/movies" element={<Movies />} />
+      <Route path="/movies/:id" element={<Movie />} >
+          <Route path="cast" element={<Cast />} />
+          <Route path="reviews" element={<Reviews />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
