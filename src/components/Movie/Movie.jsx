@@ -1,57 +1,28 @@
-import {useState, useRef} from "react";
-import axios from "axios";
-import { useEffect } from "react";
-import { Link, useParams, Outlet } from "react-router-dom";
-import { Reviews } from "components/Reviews/Reviews";
-import { Cast } from "components/Cast/Cast";
+import { useState, useRef, useEffect, Suspense } from "react";
+import { Link, useParams, Outlet, useLocation } from "react-router-dom";
 
-export const Movie = () => {
+import { fetchDetails, IMG_URL } from "components/services/tmdbAPI";
+
+const Movie = () => {
 
     const [movie, setMovie] = useState({})
-    const {id } = useParams();
+    const { id } = useParams();
+    const location = useLocation();
     
-
-const BASE_URL = 'https://api.themoviedb.org/3/search/movie';
-const GENRES_URL = 'https://api.themoviedb.org/3/genre/movie/list';
-const DETAILS_URL = 'https://api.themoviedb.org/3/movie/';
-const API_KEY = '8fc2203a963c0ec70e341b4ae617a08e';
-const IMG_URL = 'https://image.tmdb.org/t/p/w500'; // ["w300","w780","w1280","original"]
-
     const isFirstRender = useRef(true);
-
- 
-
-
-async function fetchDetails(id) {
-    if (id) {
-    const response = await axios.get(`${DETAILS_URL}${id}`, {
-        params: {
-            api_key: API_KEY,
-        }
-    }
-    )
-    const details = response.data;
-    console.log(response.data);
-    setMovie(response.data);
-    return details;
-}
-}
-
-// useEffect(() => {
-//     fetchDetails(100)
-// },[])
-
+    
   useEffect(() => {
     if (isFirstRender.current) {
-      fetchDetails(id)
+        fetchDetails(id)
+        .then(data => setMovie(data))
       isFirstRender.current = false;
      }
-  }, [])
-
-
+  }, [id])
+    
     return(<>
         
-    <div>
+        <div>
+            <Link to={location.state?.from ?? '/'}>Go Back</Link>
         <div className="poster">
             <img src={IMG_URL + movie.poster_path} alt="" width="200" />
         </div>
@@ -62,9 +33,12 @@ async function fetchDetails(id) {
         <h3>Genres</h3>
         <p>{movie.genre_ids}</p>
         </div>
-        <ul><li><Link to="cast">Cast</Link></li>
-            <li><Link to="reviews">Reviews</Link></li></ul>
-        <Outlet/>
+        <ul><li><Link to="cast" state={{from: location.state?.from}}>Cast</Link></li>
+            <li><Link to="reviews" state={{from: location.state?.from}}>Reviews</Link></li></ul>
+        <Suspense fallback={<div>Loading...</div>}>
+            <Outlet />
+            </Suspense>
     </>)
 }
 
+export default Movie;

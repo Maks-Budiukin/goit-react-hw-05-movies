@@ -1,14 +1,16 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 
-import { Movie } from "components/Movie/Movie";
 import { MoviesSearchForm } from "components/MoviesSearchForm/MoviesSearchForm";
-import axios from "axios";
+import { fetchMovies } from "components/services/tmdbAPI";
 
-export const Movies = () => {
+const Movies = () => {
 
-    const [request, setRequest] = useState("");
     const [movies, setMovies] = useState([]);
+    const [searchParams, setSearchParams] = useSearchParams();
+    
+    const location = useLocation();
+    const searchQuery = searchParams.get('query')
 
     const isFirstRender = useRef(false);
     
@@ -18,64 +20,24 @@ export const Movies = () => {
         alert('Write something!')
         return;
     }
-      setRequest(query);
+      setSearchParams({query});
     }
-    
-    // const loadingHandler = (loadingState) => {
-    // setIsLoading(loadingState);
-    // }
-
-    const fetchOnSubmit = async (movies) => {
-    setMovies(movies)
-    }
-
-    //===========================
-
-    const BASE_URL = 'https://api.themoviedb.org/3/search/movie';
-    const TRENDING_URL ='https://api.themoviedb.org/3/trending/movie/day'
-    const GENRES_URL = 'https://api.themoviedb.org/3/genre/movie/list';
-    const DETAILS_URL = 'https://api.themoviedb.org/3/movie/';
-    const API_KEY = '8fc2203a963c0ec70e341b4ae617a08e';
-    const IMG_URL = 'https://image.tmdb.org/t/p/w500'; // ["w300","w780","w1280","original"]
-
-
-    async function fetchMovies(request) {
-        if (request !== "") {
-            const response = await axios.get(BASE_URL, {
-                params: {
-                    api_key: API_KEY,
-                    query: request,
-                    // query: 'Alice',
-                    page: 1,
-                }
-            }
-            )
-            const data = response.data;
-    
-            setMovies(data.results)
-            console.log(data.results)
-            return data;
-        }
-    }
-
-    //==============================
     
     useEffect(() => {
-        if (isFirstRender.current) {
-            fetchMovies(request)
+        if (searchQuery) {
+            fetchMovies(searchQuery)
+            .then(data => setMovies(data));
         }
         isFirstRender.current = true;
-    },[request])
-
-
-
-
+    }, [searchQuery])
+    
   return (
       <>
-          <MoviesSearchForm onSubmit={onSearchSubmit}/>
+          <MoviesSearchForm onSubmit={onSearchSubmit} />
+          
           <ul>
               {movies.map((movie) =>
-                <Link to={`${movie.id}`} key={movie.id}>
+                <Link to={`${movie.id}`} key={movie.id} state={{ from: location }}>
                     <li >{movie.title}</li>
                 </Link>
               )}
@@ -84,3 +46,4 @@ export const Movies = () => {
     );
 }
 
+export default Movies;
