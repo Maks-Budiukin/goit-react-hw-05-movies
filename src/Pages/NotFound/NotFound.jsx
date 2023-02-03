@@ -1,5 +1,8 @@
+import fourofour from "../../../src/fourofour.jpg"
+
+
 const NotFound = () => {
-    return(<div>Page not found</div>)
+    return(<div><img src={fourofour}></img></div>)
 }
 
 export default NotFound;
