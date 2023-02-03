@@ -1,0 +1,24 @@
+.container {
+    width: 100%;
+    padding: 20px 32px;
+}
+
+.inactive {
+    padding: 8px 16px;
+    text-decoration: none;
+    font-weight: 900;
+    color: #fff;
+    background-color: #737284;
+    margin: 4px;
+    border-radius: 4px;
+}
+
+.active {
+    padding: 8px 16px;
+    text-decoration: none;
+    font-weight: 900;
+    color: #ff971e;
+    background-color: #737284;
+    margin: 4px;
+    border-radius: 4px;
+}

@@ -2,7 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 
 import { MoviesSearchForm } from "components/MoviesSearchForm/MoviesSearchForm";
-import { fetchMovies } from "components/services/tmdbAPI";
+import { fetchMovies } from "services/tmdbAPI";
+
+import css from "Pages/Movies/Movies.module.css"
 
 const Movies = () => {
 
@@ -35,9 +37,9 @@ const Movies = () => {
       <>
           <MoviesSearchForm onSubmit={onSearchSubmit} />
           
-          <ul>
+          <ul className={css.searchlist}>
               {movies.map((movie) =>
-                <Link to={`${movie.id}`} key={movie.id} state={{ from: location }}>
+                <Link to={`${movie.id}`} key={movie.id} state={{ from: location }} className={css.searchlink}>
                     <li >{movie.title}</li>
                 </Link>
               )}

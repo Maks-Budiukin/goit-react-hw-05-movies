@@ -1,0 +1,10 @@
+.castContainer {
+    padding: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px
+}
+
+.castItem {
+    width: 128px;
+}
