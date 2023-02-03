@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/168.9954e444.chunk.css","mappings":"AAAA,uBAEI,+BAAgC,CADhC,gBAEJ","sources":["components/Reviews/Reviews.module.css"],"sourcesContent":[".review {\n    margin-left: 24px;\n    border-bottom: 1px solid #2c2c2c;\n}"],"names":[],"sourceRoot":""}
